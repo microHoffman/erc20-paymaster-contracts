@@ -19,6 +19,9 @@ import "./utils/SafeTransferLib.sol";
 /// @dev Inherits from BasePaymaster.
 
 contract PimlicoERC20Paymaster is BasePaymaster {
+    // TODO possibly support multiple tokens in this paymaster contract
+    //  e.g. rework token to tokens mapping(address => IERC20)
+
     uint256 public constant priceDenominator = 1e6;
     uint256 public constant REFUND_POSTOP_COST = 40000; // Estimated gas cost for refunding tokens after the transaction is completed
 
@@ -152,6 +155,7 @@ contract PimlicoERC20Paymaster is BasePaymaster {
                 // If the initially provided token amount is greater than the actual amount needed, refund the difference
                 SafeTransferLib.safeTransfer(
                     address(token),
+                    // TODO probably change this address?
                     address(bytes20(context[32:52])),
                     uint256(bytes32(context[0:32])) - actualTokenNeeded
                 );
