@@ -2,7 +2,7 @@ import { BigNumber, Signer, providers, utils, constants, VoidSigner, ethers } fr
 import { UserOperationStruct } from "@account-abstraction/contracts"
 import { PimlicoERC20Paymaster, PimlicoERC20Paymaster__factory } from "./typechain"
 import { NotPromise } from "@account-abstraction/utils"
-import { NATIVE_ASSET, ORACLE_ADDRESS, TOKEN_ADDRESS } from "./constants"
+import { CONTRACT_OWNER_ADDRESS, DETERMINISTIC_DEPLOYMENT_PROXY_CONTRACT_ADDRESS, NATIVE_ASSET, ORACLE_ADDRESS, TOKEN_ADDRESS } from "./constants"
 import { TransactionRequest } from "@ethersproject/abstract-provider"
 
 export type SupportedERC20 = "USDC" | "USDT" | "DAI"
@@ -16,12 +16,12 @@ export enum Blockchains {
 }
 
 export interface ERC20PaymasterBuildOptions {
-    entrypoint?: string
-    nativeAsset?: string
-    nativeAssetOracle?: string
     tokenAddress?: string
+    entrypoint?: string
     tokenOracle?: string
+    nativeAssetOracle?: string
     owner?: string
+    nativeAsset?: string
     deployer?: Signer
 }
 
@@ -158,7 +158,7 @@ export async function getERC20Paymaster(
             nativeAssetOracle: ORACLE_ADDRESS[chainId][NATIVE_ASSET[chainId]],
             tokenAddress: TOKEN_ADDRESS[chainId][erc20],
             tokenOracle: ORACLE_ADDRESS[chainId][erc20],
-            owner: "0x4337000c2828f5260d8921fd25829f606b9e8680" // pimlico address
+            owner: CONTRACT_OWNER_ADDRESS, // "0x4337000c2828f5260d8921fd25829f606b9e8680" // pimlico address
         }
     } else {
         parsedOptions = await validatePaymasterOptions(provider, erc20, options)
@@ -175,7 +175,7 @@ export async function calculateERC20PaymasterAddress(
     options: Required<Omit<Omit<ERC20PaymasterBuildOptions, "nativeAsset">, "deployer">>
 ): Promise<string> {
     const address = utils.getCreate2Address(
-        "0x4e59b44847b379578588920cA78FbF26c0B4956C",
+        DETERMINISTIC_DEPLOYMENT_PROXY_CONTRACT_ADDRESS, // "0x4e59b44847b379578588920cA78FbF26c0B4956C",
         "0x0000000000000000000000000000000000000000000000000000000000000000",
         utils.keccak256(getPaymasterConstructor(options))
     )
@@ -248,7 +248,12 @@ export class ERC20Paymaster {
     async generatePaymasterAndData(userOp: NotPromise<UserOperationStruct>): Promise<string> {
         const tokenAmount = await this.calculateTokenAmount(userOp)
         const paymasterAndData = utils.hexlify(
-            utils.concat([this.contract.address, utils.hexZeroPad(utils.hexlify(tokenAmount), 32)])
+            utils.concat(
+                [
+                    this.contract.address, 
+                    utils.hexZeroPad(utils.hexlify(tokenAmount), 32)
+                ]
+            )
         )
         return paymasterAndData
     }

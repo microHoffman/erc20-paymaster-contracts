@@ -8,6 +8,10 @@ export const TOKEN_ADDRESS: Record<number, Record<string, string>> = {
         DAI: "0x11fE4B6AE13d2a6055C8D9cF65c55bac32B5d844",
         USDC: "0x07865c6E87B9F70255377e024ace6630C1Eaa37F"
     },
+    31337: {
+        DAI: "0x11fE4B6AE13d2a6055C8D9cF65c55bac32B5d844",
+        USDC: "0x07865c6E87B9F70255377e024ace6630C1Eaa37F"
+    },
     56: {
         USDC: "0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d",
         USDT: "0x55d398326f99059ff775485246999027b3197955"
@@ -36,6 +40,7 @@ export const TOKEN_ADDRESS: Record<number, Record<string, string>> = {
 export const NATIVE_ASSET: Record<number, string> = {
     1: "ETH",
     5: "ETH",
+    31337: "ETH",
     56: "BNB",
     137: "MATIC",
     42161: "ETH",
@@ -51,6 +56,11 @@ export const ORACLE_ADDRESS: Record<number, Record<string, string>> = {
         USDT: "0x3e7d1eab13ad0104d2750b8863b489d65364e32d"
     },
     5: {
+        ETH: "0xD4a33860578De61DBAbDc8BFdb98FD742fA7028e",
+        DAI: "0x0d79df66BE487753B02D015Fb622DED7f0E9798d",
+        USDC: "0xAb5c49580294Aff77670F839ea425f5b78ab3Ae7"
+    },
+    31337: {
         ETH: "0xD4a33860578De61DBAbDc8BFdb98FD742fA7028e",
         DAI: "0x0d79df66BE487753B02D015Fb622DED7f0E9798d",
         USDC: "0xAb5c49580294Aff77670F839ea425f5b78ab3Ae7"
@@ -85,3 +95,7 @@ export const ORACLE_ADDRESS: Record<number, Record<string, string>> = {
         MATIC: "0xd0D5e3DB44DE05E9F294BB0a3bEEaF030DE24Ada"
     }
 }
+
+// https://github.com/Arachnid/deterministic-deployment-proxy
+export const DETERMINISTIC_DEPLOYMENT_PROXY_CONTRACT_ADDRESS = "0x4e59b44847b379578588920cA78FbF26c0B4956C"
+export const CONTRACT_OWNER_ADDRESS = "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"

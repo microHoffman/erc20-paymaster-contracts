@@ -3,7 +3,7 @@ import "@nomiclabs/hardhat-ethers"
 import "@nomiclabs/hardhat-waffle"
 import "@nomicfoundation/hardhat-foundry"
 import "@nomicfoundation/hardhat-verify"
-// import "./task/deploy"
+import "./task/deploy"
 import "@typechain/hardhat"
 import "@typechain/ethers-v5"
 import * as fs from "fs"
@@ -59,12 +59,16 @@ const config = {
     networks: {
         localhost: getNetwork1("http://127.0.0.1:8545"),
         mainnet: getNetwork("mainnet"),
-        goerli: getNetwork("goerli"),
+        goerli: {
+            url: "https://eth-goerli.g.alchemy.com/v2/puHwlMweHAJ0sDTvTlNJKHQoBo2B7FHw",
+            accounts: getAccounts(),
+        },
         sepolia: getNetwork("sepolia"),
         polygon: getNetwork("polygon-mainnet"),
         mumbai: getNetwork("polygon-mumbai"),
         arbitrum: getNetwork("arbitrum-mainnet")
     },
+    defaultNetwork: "localhost", // "goerli",
     typechain: {
         outDir: "sdk/typechain",
         target: "ethers-v5"
